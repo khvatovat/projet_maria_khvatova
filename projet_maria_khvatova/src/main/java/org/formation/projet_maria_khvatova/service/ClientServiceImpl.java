@@ -3,6 +3,7 @@ package org.formation.projet_maria_khvatova.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.formation.projet_maria_khvatova.entity.Client;
+import org.formation.projet_maria_khvatova.entity.CompteBancaire;
 import org.formation.projet_maria_khvatova.repository.ClientRepository;
 import org.springframework.stereotype.Service;
 
