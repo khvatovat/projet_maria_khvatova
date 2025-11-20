@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ClientService {
-    List<Client> getAllClients();
     Client createClient(Client client);
-    Optional<Client> getClient(Long id, String nom, String prenom);
-
-    void updateClient(Client client, Long id, String nom, String prenom);
+    Optional<Client> getClient(Long id);
+    List<Client> getAllClients();
+    Client updateClient(Client client);
+    void deleteClient(Long id);
 }
