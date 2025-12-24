@@ -1,56 +1,53 @@
 package org.formation.projet_maria_khvatova.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.formation.projet_maria_khvatova.entity.Client;
+import org.formation.projet_maria_khvatova.dto.ClientCreateDto;
+import org.formation.projet_maria_khvatova.dto.ClientDto;
+import org.formation.projet_maria_khvatova.dto.ClientUpdateDto;
 import org.formation.projet_maria_khvatova.service.ClientService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
+@RequestMapping("clients")
 @RequiredArgsConstructor
 public class ClientController {
 
     private final ClientService clientService;
 
-    @GetMapping("clients")
-    List<Client> getClients() {
+    @GetMapping
+    public List<ClientDto> getAllClients() {
         return clientService.getAllClients();
     }
 
-    @PostMapping("clients")
-    Client createClient(@RequestBody Client client) {
-        return clientService.createClient(client);
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClientDto createClient(@RequestBody @Valid ClientCreateDto dto) {
+        return clientService.createClient(dto);
     }
 
-    @GetMapping("clients/{id}")
-    ResponseEntity<Client> getClient(@PathVariable Long id) {
-        Optional<Client> client = clientService.getClient(id);
-        return client.map(ResponseEntity::ok)
+    @GetMapping("{id}")
+    public ResponseEntity<ClientDto> getClient(@PathVariable Long id) {
+        return clientService.getClient(id)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("clients/{id}")
-    ResponseEntity<Client> updateClient(@RequestBody Client client, @PathVariable Long id) {
-        if (id == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        client.setId(id);
-
-        try {
-            Client updatedClient = clientService.updateClient(client);
-            return ResponseEntity.ok(updatedClient);
-        } catch (Exception e) {
-
-            return ResponseEntity.notFound().build();
-        }
+    @PatchMapping("{id}")
+    public ResponseEntity<ClientDto> updateClient(@PathVariable Long id,
+                                                  @RequestBody @Valid ClientUpdateDto dto) {
+        return clientService.updateClient(id, dto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("clients/{id}")
-    ResponseEntity<Void> deleteClient(@PathVariable Long id) {
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteClient(@PathVariable Long id) {
         clientService.deleteClient(id);
-        return ResponseEntity.noContent().build();
     }
 }

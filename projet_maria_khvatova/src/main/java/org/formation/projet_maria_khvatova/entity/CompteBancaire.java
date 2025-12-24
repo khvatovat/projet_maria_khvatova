@@ -1,15 +1,24 @@
 package org.formation.projet_maria_khvatova.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Data
-public abstract class  CompteBancaire {
+@NoArgsConstructor
+public abstract class CompteBancaire {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long numeroCompte;
+
     private double solde;
-    private String nomProprietaire;
-    private Date dateOuverture;
+
+    private LocalDate dateOuverture;
 
     public void deposer(double montant) {
         if (montant > 0) {
